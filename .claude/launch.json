@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "rhythm-typer",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "/Users/michaelpyon/Documents/rhythm-typer", "-l", "3456"],
+      "port": 3456
+    }
+  ]
+}
