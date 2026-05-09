@@ -3,8 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rhythm Typer</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦈</text></svg>">
+<meta name="theme-color" content="#001830">
+<meta name="robots" content="index, follow">
+<meta name="description" content="Rhythm Typer is a typing rhythm game. Type words to destroy sharks swimming toward you. Hit each keystroke on the beat for combos and bonus points.">
+<meta name="keywords" content="typing game, rhythm game, browser game, typing practice, shark game">
+<meta name="author" content="Rhythm Typer">
+
+<title>Rhythm Typer: Type to the Beat, Destroy the Sharks</title>
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Rhythm Typer: Type to the Beat, Destroy the Sharks">
+<meta property="og:description" content="A typing rhythm game where you type words to destroy sharks before they reach you. Time keystrokes to the beat for bigger combos.">
+<meta property="og:url" content="https://rhythm-typer.vercel.app/">
+<meta property="og:image" content="https://rhythm-typer.vercel.app/og.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Rhythm Typer">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Rhythm Typer: Type to the Beat, Destroy the Sharks">
+<meta name="twitter:description" content="A typing rhythm game where you type words to destroy sharks before they reach you. Time keystrokes to the beat for bigger combos.">
+<meta name="twitter:image" content="https://rhythm-typer.vercel.app/og.svg">
+
+<link rel="canonical" href="https://rhythm-typer.vercel.app/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦈</text></svg>">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Rhythm Typer",
+  "description": "A typing rhythm game where you type words to destroy sharks before they reach you. Time keystrokes to the beat for bigger combos.",
+  "applicationCategory": "GameApplication",
+  "genre": "Typing Game",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -145,6 +186,7 @@
   }
   .btn {
     padding: 14px 40px;
+    min-height: 48px;
     font-size: 20px;
     color: #fff;
     background: linear-gradient(135deg, #0a6e8a, #0cf);
@@ -153,14 +195,41 @@
     cursor: pointer;
     pointer-events: auto;
     margin-top: 20px;
-    transition: transform 0.15s, box-shadow 0.15s;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
     text-transform: uppercase;
     letter-spacing: 2px;
     font-weight: bold;
+    font-family: inherit;
   }
   .btn:hover {
     transform: scale(1.05);
     box-shadow: 0 0 20px rgba(0,200,255,0.4);
+  }
+  .btn:active {
+    transform: scale(0.98);
+  }
+  .mobile-warning {
+    display: none;
+    color: #ff0;
+    background: rgba(255,255,0,0.1);
+    border: 1px solid rgba(255,255,0,0.4);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 14px;
+    max-width: 420px;
+    text-align: center;
+  }
+  @media (max-width: 768px), (pointer: coarse) {
+    .mobile-warning { display: block; }
+    .screen-overlay h1 { font-size: 44px; }
+    .screen-overlay h2 { font-size: 20px; }
+    .screen-overlay p { font-size: 14px; padding: 0 16px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn, .diff-btn, .beat-pip, #health-bar, #timing-feedback {
+      transition: none;
+    }
   }
   .difficulty-select {
     display: flex;
@@ -169,6 +238,7 @@
   }
   .diff-btn {
     padding: 14px 24px;
+    min-height: 44px;
     font-size: 14px;
     color: #fff;
     background: rgba(255,255,255,0.1);
@@ -176,14 +246,23 @@
     border-radius: 6px;
     cursor: pointer;
     pointer-events: auto;
-    transition: all 0.15s;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
     text-transform: uppercase;
     letter-spacing: 1px;
+    font-family: inherit;
   }
   .diff-btn:hover, .diff-btn.selected {
     background: rgba(0,200,255,0.2);
     border-color: #0cf;
     color: #0cf;
+  }
+  .diff-btn:focus-visible {
+    outline: 2px solid #0cf;
+    outline-offset: 3px;
+  }
+  .btn:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 4px;
   }
   #final-score { font-size: 48px; color: #0cf; font-weight: bold; margin: 10px 0; }
   #final-stats { color: rgba(255,255,255,0.6); margin-bottom: 10px; }
@@ -191,28 +270,29 @@
 </style>
 </head>
 <body>
-<canvas id="game-canvas"></canvas>
+<main role="main" aria-label="Rhythm Typer game">
+<canvas id="game-canvas" role="img" aria-label="Rhythm Typer gameplay area showing sharks and underwater scene"></canvas>
 
-<div id="ui-overlay">
-  <div id="hud" style="display:none;">
+<div id="ui-overlay" aria-live="polite">
+  <div id="hud" style="display:none;" role="status" aria-label="Game HUD">
     <div class="hud-box">
-      <div id="score-display">0</div>
-      <div id="combo-display"></div>
+      <div id="score-display" aria-label="Score">0</div>
+      <div id="combo-display" aria-label="Combo"></div>
     </div>
     <div class="hud-box" style="text-align:right;">
       <div>HEALTH</div>
-      <div id="health-bar-container"><div id="health-bar" style="width:100%"></div></div>
+      <div id="health-bar-container" role="progressbar" aria-label="Health" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><div id="health-bar" style="width:100%"></div></div>
       <div style="margin-top:4px;font-size:12px;color:rgba(255,255,255,0.5);">
         BPM: <span id="bpm-display">120</span> | Wave: <span id="wave-display">1</span>
       </div>
     </div>
   </div>
 
-  <div id="current-word-display"></div>
+  <div id="current-word-display" aria-live="polite"></div>
 
-  <div id="timing-feedback"></div>
+  <div id="timing-feedback" aria-live="polite"></div>
 
-  <div id="beat-indicator" style="display:none;">
+  <div id="beat-indicator" style="display:none;" aria-hidden="true">
     <div class="beat-pip" data-beat="0"></div>
     <div class="beat-pip" data-beat="1"></div>
     <div class="beat-pip" data-beat="2"></div>
@@ -221,32 +301,56 @@
 </div>
 
 <!-- Title Screen -->
-<div id="title-screen" class="screen-overlay">
-  <h1>RHYTHM TYPER</h1>
+<section id="title-screen" class="screen-overlay" aria-labelledby="title-heading">
+  <h1 id="title-heading">RHYTHM TYPER</h1>
   <h2>Type to the Beat</h2>
-  <p>Words swim toward you on sharks. Type them to destroy the sharks before they reach you!</p>
-  <p>But watch the beat. Time your keystrokes to the rhythm for bonus points and bigger combos.</p>
+  <p>Words swim toward you on sharks. Type them to destroy the sharks before they reach you.</p>
+  <p>Watch the beat. Time your keystrokes to the rhythm for bonus points and bigger combos.</p>
   <p class="subtitle">PERFECT &gt; GOOD &gt; OK &gt; MISS</p>
-  <div class="difficulty-select">
-    <button class="diff-btn selected" data-diff="easy">Easy<br><small>90 BPM</small></button>
-    <button class="diff-btn" data-diff="normal">Normal<br><small>120 BPM</small></button>
-    <button class="diff-btn" data-diff="hard">Hard<br><small>150 BPM</small></button>
+  <div class="mobile-warning" role="alert">
+    A physical keyboard is required. Please play on a desktop or laptop.
   </div>
-  <button class="btn" id="start-btn">START</button>
-</div>
+  <div class="difficulty-select" role="group" aria-label="Difficulty selection">
+    <button class="diff-btn selected" data-diff="easy" aria-pressed="true">Easy<br><small>90 BPM</small></button>
+    <button class="diff-btn" data-diff="normal" aria-pressed="false">Normal<br><small>120 BPM</small></button>
+    <button class="diff-btn" data-diff="hard" aria-pressed="false">Hard<br><small>150 BPM</small></button>
+  </div>
+  <button class="btn" id="start-btn" type="button">START</button>
+</section>
 
 <!-- Game Over Screen -->
-<div id="gameover-screen" class="screen-overlay hidden">
-  <h1>GAME OVER</h1>
-  <div id="final-score">0</div>
+<section id="gameover-screen" class="screen-overlay hidden" aria-labelledby="gameover-heading" aria-hidden="true">
+  <h1 id="gameover-heading">GAME OVER</h1>
+  <div id="final-score" aria-label="Final score">0</div>
   <div id="final-stats"></div>
-  <button class="btn" id="restart-btn">PLAY AGAIN</button>
-</div>
+  <button class="btn" id="restart-btn" type="button">PLAY AGAIN</button>
+</section>
+</main>
 
 <script>
 // ============================================================
 // RHYTHM TYPER - A typing rhythm game
+// Type words on sharks. Hit each keystroke on the beat for combo bonuses.
 // ============================================================
+
+// Polyfill CanvasRenderingContext2D.roundRect for older browsers (Safari < 16)
+if (typeof CanvasRenderingContext2D !== 'undefined' &&
+    !CanvasRenderingContext2D.prototype.roundRect) {
+  CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+    if (typeof r === 'number') r = [r, r, r, r];
+    else if (Array.isArray(r) && r.length === 1) r = [r[0], r[0], r[0], r[0]];
+    const [tl, tr, br, bl] = r;
+    this.moveTo(x + tl, y);
+    this.lineTo(x + w - tr, y);
+    this.quadraticCurveTo(x + w, y, x + w, y + tr);
+    this.lineTo(x + w, y + h - br);
+    this.quadraticCurveTo(x + w, y + h, x + w - br, y + h);
+    this.lineTo(x + bl, y + h);
+    this.quadraticCurveTo(x, y + h, x, y + h - bl);
+    this.lineTo(x, y + tl);
+    this.quadraticCurveTo(x, y, x + tl, y);
+  };
+}
 
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
@@ -1034,6 +1138,7 @@ function updateHUD() {
     comboEl.textContent = '';
   }
   document.getElementById('health-bar').style.width = `${GAME.health}%`;
+  document.getElementById('health-bar-container').setAttribute('aria-valuenow', Math.round(GAME.health));
   document.getElementById('bpm-display').textContent = GAME.bpm;
   document.getElementById('wave-display').textContent = GAME.wave;
 
@@ -1086,7 +1191,6 @@ function spawnDestroyParticles(x, y) {
 
 // ---- Game Loop ----
 let lastTime = 0;
-let useSetInterval = false;
 
 function gameLoop(timestamp) {
   if (!timestamp) timestamp = performance.now();
@@ -1262,10 +1366,16 @@ function startGame() {
   GAME.GOOD_WINDOW = settings.GOOD_WINDOW;
   GAME.OK_WINDOW = settings.OK_WINDOW;
 
-  document.getElementById('title-screen').classList.add('hidden');
-  document.getElementById('gameover-screen').classList.add('hidden');
+  const titleScreen = document.getElementById('title-screen');
+  const gameoverScreen = document.getElementById('gameover-screen');
+  titleScreen.classList.add('hidden');
+  titleScreen.setAttribute('aria-hidden', 'true');
+  gameoverScreen.classList.add('hidden');
+  gameoverScreen.setAttribute('aria-hidden', 'true');
   document.getElementById('hud').style.display = 'flex';
   document.getElementById('beat-indicator').style.display = 'flex';
+  // Update health bar aria
+  document.getElementById('health-bar-container').setAttribute('aria-valuenow', GAME.health);
   updateHUD();
 }
 
@@ -1293,7 +1403,11 @@ function gameOver() {
     </div>
   `;
 
-  document.getElementById('gameover-screen').classList.remove('hidden');
+  const gameoverScreen = document.getElementById('gameover-screen');
+  gameoverScreen.classList.remove('hidden');
+  gameoverScreen.setAttribute('aria-hidden', 'false');
+  // Focus restart button for keyboard users
+  setTimeout(() => document.getElementById('restart-btn').focus(), 50);
 }
 
 // ---- UI Event Listeners ----
@@ -1302,8 +1416,12 @@ document.getElementById('restart-btn').addEventListener('click', () => startGame
 
 document.querySelectorAll('.diff-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('.diff-btn').forEach(b => {
+      b.classList.remove('selected');
+      b.setAttribute('aria-pressed', 'false');
+    });
     btn.classList.add('selected');
+    btn.setAttribute('aria-pressed', 'true');
     GAME.difficulty = btn.dataset.diff;
   });
 });
