@@ -24,42 +24,32 @@ The person most likely to love and share Rhythm Typer is a 22-to-28-year-old who
 
 ## Prioritized Plan
 
-### Quick Wins (S effort, no deploy needed to verify)
+### Shipped Wave 1
 
-1. **Personal best persistence via localStorage** (THIS PASS, S/M effort)
-   - Files: index.html only (single-file app).
-   - What: On game over, check if GAME.score > stored best. Show "NEW BEST!" on the game-over screen when beaten (styled in gold). Show "Your best: X,XXX (Wave Y)" on the title screen after the first run. Wrap all localStorage calls in try/catch with an in-memory fallback for private mode.
-   - Why the evangelist cares: closes the "every session resets" bounce. The typer-gamer has a number to defend and share.
-   - Effort: S (20 to 30 lines, no new files).
-   - Deploy needed to verify: no (static file, runs locally or on any static server).
+- Personal best persistence via localStorage (NEW BEST! on game over, "Your best: X,XXX on Difficulty (Wave Y)" on title screen, in-memory fallback for private mode).
+- Difficulty label stored alongside best score (item 2, free add-on).
 
-2. **Show difficulty label alongside best score on title** (ties into #1, free add-on)
-   - What: Store difficulty alongside best score so the title shows "Your best: 4,820 on Normal (Wave 3)".
-   - Why: "Normal" is the bar; Hard-mode best score is a flex.
+### Shipped Wave 2
 
-3. **Difficulty-specific best scores** (M effort, deferred)
+- Keyboard shortcut Enter/Space to restart on game over (no mouse required after a run ends).
+- Auto-target when exactly 1 enemy is alive and nothing is targeted (reduces frustration when the last shark is close).
+
+### Quick Wins Remaining
+
+1. **Difficulty-specific best scores** (M effort)
    - What: Store a separate best for each difficulty key in localStorage. Title shows the best per selected difficulty.
    - Why: A Hard-mode best vs Easy-mode best are incomparable. Encourages trying harder modes.
    - Effort: M.
 
-4. **Wave announcement visual polish** (S, deferred)
+2. **Wave announcement visual polish** (S)
    - What: The "WAVE X" floating text appears mid-screen but is easy to miss. A brief full-screen dimmed overlay with wave number for 1.5 seconds would feel intentional.
    - Effort: S.
 
-5. **Target auto-select on single visible word** (S, deferred)
-   - What: When only 1 enemy is alive, auto-target it without requiring the first-letter press.
-   - Why: Reduces frustration when a shark is close and the player knows the word.
-   - Effort: S.
-
-6. **BPM ramp-up signal** (M, deferred)
+3. **BPM ramp-up signal** (S/M)
    - What: When BPM increases at wave multiples of 3, show a brief "BPM UP: 125" flash with a higher-pitched click burst so the player knows the tempo shifted.
    - Effort: S.
 
-7. **Keyboard shortcut to restart on game over** (S, deferred)
-   - What: Press Enter or Space on game-over screen to restart, so mouse is not required.
-   - Effort: S (1 event listener).
-
-8. **Favicon clarity** (S, already has shark emoji favicon, done)
+4. **Favicon clarity** (S, already has shark emoji favicon, done)
 
 ### Bigger Bets (L effort, skip this pass)
 

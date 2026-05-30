@@ -1360,6 +1360,15 @@ function updateGame(dt) {
     GAME.targetEnemy = null;
   }
 
+  // Auto-target when exactly 1 enemy is alive and nothing is targeted
+  if (!GAME.targetEnemy) {
+    const alive = GAME.enemies.filter(e => e.alive);
+    if (alive.length === 1) {
+      alive[0].targeted = true;
+      GAME.targetEnemy = alive[0];
+    }
+  }
+
   // Update particles
   GAME.particles.forEach(p => p.update(dt));
   GAME.particles = GAME.particles.filter(p => p.life > 0);
@@ -1576,9 +1585,13 @@ document.querySelectorAll('.diff-btn').forEach(btn => {
   });
 });
 
-// Prevent space from scrolling
+// Prevent space from scrolling; Enter/Space to restart on game over
 window.addEventListener('keydown', (e) => {
   if (e.code === 'Space' && GAME.state === 'playing') e.preventDefault();
+  if ((e.code === 'Enter' || e.code === 'Space') && GAME.state === 'gameover') {
+    e.preventDefault();
+    startGame();
+  }
 });
 
 // ---- Personal Best ----
