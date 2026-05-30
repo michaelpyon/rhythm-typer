@@ -1456,7 +1456,10 @@ document.getElementById('restart-btn').addEventListener('click', () => startGame
 // ---- Share Score ----
 const SHARE_URL = 'rhythm-typer.vercel.app';
 function getShareText() {
-  return `I scored ${GAME.score.toLocaleString()} on Rhythm Typer - ${SHARE_URL}`;
+  const diff = GAME.difficulty.charAt(0).toUpperCase() + GAME.difficulty.slice(1);
+  const total = GAME.totalCharsTyped || 1;
+  const perfectPct = Math.round(GAME.perfectCount / total * 100);
+  return `Rhythm Typer [${diff}] - Score: ${GAME.score.toLocaleString()} | Wave ${GAME.wave} | Max combo ${GAME.maxCombo}x | ${perfectPct}% perfect\nCan you beat it? https://${SHARE_URL}`;
 }
 
 document.getElementById('share-copy-btn').addEventListener('click', (e) => {
@@ -1477,7 +1480,10 @@ document.getElementById('share-copy-btn').addEventListener('click', (e) => {
 });
 
 document.getElementById('share-tweet-btn').addEventListener('click', () => {
-  const text = `I scored ${GAME.score.toLocaleString()} on Rhythm Typer`;
+  const diff = GAME.difficulty.charAt(0).toUpperCase() + GAME.difficulty.slice(1);
+  const total = GAME.totalCharsTyped || 1;
+  const perfectPct = Math.round(GAME.perfectCount / total * 100);
+  const text = `Rhythm Typer [${diff}] - Score: ${GAME.score.toLocaleString()} | Wave ${GAME.wave} | Max combo ${GAME.maxCombo}x | ${perfectPct}% perfect - Can you beat it?`;
   const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent('https://' + SHARE_URL)}`;
   window.open(url, '_blank', 'noopener');
 });
