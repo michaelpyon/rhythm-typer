@@ -101,9 +101,27 @@
     left: 50%;
     transform: translateX(-50%);
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+  }
+  #beat-pips {
+    display: flex;
     align-items: center;
     gap: 12px;
-    pointer-events: none;
+  }
+  #beat-hint {
+    font-size: 12px;
+    color: rgba(0,200,255,0.75);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.6s;
+    white-space: nowrap;
+  }
+  #beat-hint.visible {
+    opacity: 1;
   }
   .beat-pip {
     width: 16px; height: 16px;
@@ -328,10 +346,13 @@
   <div id="timing-feedback" aria-live="polite"></div>
 
   <div id="beat-indicator" style="display:none;" aria-hidden="true">
-    <div class="beat-pip" data-beat="0"></div>
-    <div class="beat-pip" data-beat="1"></div>
-    <div class="beat-pip" data-beat="2"></div>
-    <div class="beat-pip" data-beat="3"></div>
+    <div id="beat-pips">
+      <div class="beat-pip" data-beat="0"></div>
+      <div class="beat-pip" data-beat="1"></div>
+      <div class="beat-pip" data-beat="2"></div>
+      <div class="beat-pip" data-beat="3"></div>
+    </div>
+    <div id="beat-hint">Type on the flash for more points</div>
   </div>
 </div>
 
@@ -548,6 +569,8 @@ const GAME = {
   beatPulse: 0,
   flashColor: null,
   flashAlpha: 0,
+
+  hintDismissed: false,
 
   // Timing windows (ms from nearest beat)
   PERFECT_WINDOW: 50,
@@ -999,6 +1022,17 @@ function updateBeat(now) {
     document.querySelectorAll('.beat-pip').forEach((pip, i) => {
       pip.classList.toggle('active', i === GAME.currentBeatPip);
     });
+
+    // Show hint for the first 8 beats, then fade it out
+    if (!GAME.hintDismissed) {
+      const hint = document.getElementById('beat-hint');
+      if (GAME.beatCount === 1) {
+        hint.classList.add('visible');
+      } else if (GAME.beatCount === 9) {
+        hint.classList.remove('visible');
+        GAME.hintDismissed = true;
+      }
+    }
   }
 
   // Decay beat pulse
@@ -1401,6 +1435,7 @@ function startGame() {
   GAME.screenShake = 0;
   GAME.beatPulse = 0;
   GAME.flashAlpha = 0;
+  GAME.hintDismissed = false;
   GAME.PERFECT_WINDOW = settings.PERFECT_WINDOW;
   GAME.GOOD_WINDOW = settings.GOOD_WINDOW;
   GAME.OK_WINDOW = settings.OK_WINDOW;
@@ -1413,6 +1448,7 @@ function startGame() {
   gameoverScreen.setAttribute('aria-hidden', 'true');
   document.getElementById('hud').style.display = 'flex';
   document.getElementById('beat-indicator').style.display = 'flex';
+  document.getElementById('beat-hint').classList.remove('visible');
   // Update health bar aria
   document.getElementById('health-bar-container').setAttribute('aria-valuenow', GAME.health);
   updateHUD();
