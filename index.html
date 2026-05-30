@@ -320,6 +320,24 @@
     outline: 2px solid #0cf;
     outline-offset: 3px;
   }
+  #personal-best-banner {
+    font-size: 13px;
+    color: rgba(0,200,255,0.7);
+    letter-spacing: 1px;
+    margin-top: 10px;
+    display: none;
+  }
+  #new-best-label {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffd700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 4px 0 8px;
+    min-height: 24px;
+    text-shadow: 0 0 12px #ffd700;
+    display: none;
+  }
 </style>
 </head>
 <body>
@@ -371,12 +389,14 @@
     <button class="diff-btn" data-diff="normal" aria-pressed="false">Normal<br><small>120 BPM</small></button>
     <button class="diff-btn" data-diff="hard" aria-pressed="false">Hard<br><small>150 BPM</small></button>
   </div>
+  <div id="personal-best-banner" aria-live="polite"></div>
   <button class="btn" id="start-btn" type="button">START</button>
 </section>
 
 <!-- Game Over Screen -->
 <section id="gameover-screen" class="screen-overlay hidden" aria-labelledby="gameover-heading" aria-hidden="true">
   <h1 id="gameover-heading">GAME OVER</h1>
+  <div id="new-best-label" aria-live="polite"></div>
   <div id="final-score" aria-label="Final score">0</div>
   <div id="final-stats"></div>
   <div class="share-row">
@@ -1449,6 +1469,12 @@ function startGame() {
   document.getElementById('hud').style.display = 'flex';
   document.getElementById('beat-indicator').style.display = 'flex';
   document.getElementById('beat-hint').classList.remove('visible');
+  // Reset new-best label styles for next game over
+  const nbEl = document.getElementById('new-best-label');
+  nbEl.style.color = '';
+  nbEl.style.textShadow = '';
+  nbEl.style.fontSize = '';
+  nbEl.style.display = 'none';
   // Update health bar aria
   document.getElementById('health-bar-container').setAttribute('aria-valuenow', GAME.health);
   updateHUD();
@@ -1460,6 +1486,20 @@ function gameOver() {
   document.getElementById('beat-indicator').style.display = 'none';
   document.getElementById('current-word-display').innerHTML = '';
   document.getElementById('timing-feedback').style.opacity = '0';
+
+  const isNewBest = updatePersonalBest();
+  const newBestEl = document.getElementById('new-best-label');
+  if (isNewBest) {
+    newBestEl.textContent = 'NEW BEST!';
+    newBestEl.style.display = 'block';
+  } else {
+    const pb = pbGet();
+    newBestEl.textContent = pb ? `Best: ${pb.score.toLocaleString()} (Wave ${pb.wave})` : '';
+    newBestEl.style.display = pb ? 'block' : 'none';
+    newBestEl.style.color = 'rgba(255,255,255,0.4)';
+    newBestEl.style.textShadow = 'none';
+    newBestEl.style.fontSize = '14px';
+  }
 
   document.getElementById('final-score').textContent = GAME.score.toLocaleString();
   const total = GAME.totalCharsTyped || 1;
@@ -1541,7 +1581,43 @@ window.addEventListener('keydown', (e) => {
   if (e.code === 'Space' && GAME.state === 'playing') e.preventDefault();
 });
 
+// ---- Personal Best ----
+const PB_KEY = 'rhythmTyper_personalBest';
+let _pbMemory = null; // in-memory fallback for private/quota contexts
+
+function pbGet() {
+  try {
+    const raw = localStorage.getItem(PB_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (_) {}
+  return _pbMemory;
+}
+
+function pbSet(data) {
+  _pbMemory = data;
+  try { localStorage.setItem(PB_KEY, JSON.stringify(data)); } catch (_) {}
+}
+
+function updatePersonalBest() {
+  const prev = pbGet();
+  const isNew = !prev || GAME.score > prev.score;
+  if (isNew) {
+    pbSet({ score: GAME.score, wave: GAME.wave, diff: GAME.difficulty });
+  }
+  return isNew;
+}
+
+function renderPersonalBestBanner() {
+  const pb = pbGet();
+  const banner = document.getElementById('personal-best-banner');
+  if (!pb) { banner.style.display = 'none'; return; }
+  const diffLabel = pb.diff.charAt(0).toUpperCase() + pb.diff.slice(1);
+  banner.textContent = `Your best: ${pb.score.toLocaleString()} on ${diffLabel} (Wave ${pb.wave})`;
+  banner.style.display = 'block';
+}
+
 // ---- Start ----
+renderPersonalBestBanner();
 requestAnimationFrame(gameLoop);
 </script>
 </body>
