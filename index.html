@@ -149,6 +149,12 @@
     transform: scale(1.5);
     box-shadow: 0 0 16px #0ff;
   }
+  .beat-pip.active.offbeat {
+    background: #f4f;
+    border-color: #f4f;
+    transform: scale(1.2);
+    box-shadow: 0 0 12px rgba(255,68,255,0.8);
+  }
   #timing-feedback {
     position: absolute;
     bottom: 70px;
@@ -535,7 +541,7 @@
       <div class="beat-pip" data-beat="2"></div>
       <div class="beat-pip" data-beat="3"></div>
     </div>
-    <div id="beat-hint">Type on the flash for more points</div>
+    <div id="beat-hint">Type on the beat or offbeat</div>
   </div>
 </div>
 
@@ -544,7 +550,7 @@
   <div class="title-eyebrow">Deep-sea rhythm trial</div>
   <h1 id="title-heading">RHYTHM TYPER</h1>
   <h2>Type fast. Hit the beat.</h2>
-  <p>Destroy each shark before it reaches your diver. On-beat keystrokes build the score.</p>
+  <p>Destroy each shark before it reaches your diver. Beat and offbeat keystrokes build the score.</p>
   <div class="timing-windows" id="timing-windows" aria-label="Easy timing windows">
     <span><strong>Perfect</strong> <span id="perfect-window">65</span> ms</span>
     <span>Good <span id="good-window">130</span> ms</span>
@@ -742,6 +748,7 @@ const GAME = {
   lastBeatTime: 0,
   beatCount: 0,
   currentBeatPip: 0,
+  offbeatPlayed: false,
 
   score: 0,
   combo: 0,
@@ -1210,12 +1217,13 @@ function drawFlash() {
 // ---- Beat System ----
 function updateBeat(now) {
   const interval = GAME.beatInterval;
-  const elapsed = now - GAME.lastBeatTime;
+  let elapsed = now - GAME.lastBeatTime;
 
   if (elapsed >= interval) {
     GAME.lastBeatTime = now - (elapsed % interval);
     GAME.beatCount++;
     GAME.currentBeatPip = GAME.beatCount % 4;
+    GAME.offbeatPlayed = false;
     GAME.beatPulse = 1;
 
     // Play metronome click
@@ -1225,6 +1233,7 @@ function updateBeat(now) {
     // Update beat pips
     document.querySelectorAll('.beat-pip').forEach((pip, i) => {
       pip.classList.toggle('active', i === GAME.currentBeatPip);
+      pip.classList.remove('offbeat');
     });
 
     // Show hint for the first 8 beats, then fade it out
@@ -1237,6 +1246,14 @@ function updateBeat(now) {
         GAME.hintDismissed = true;
       }
     }
+    elapsed = now - GAME.lastBeatTime;
+  }
+
+  if (!GAME.offbeatPlayed && elapsed >= interval / 2) {
+    GAME.offbeatPlayed = true;
+    GAME.beatPulse = Math.max(GAME.beatPulse, 0.55);
+    playClick(660, 0.025, 0.04);
+    document.querySelector(`.beat-pip[data-beat="${GAME.currentBeatPip}"]`)?.classList.add('offbeat');
   }
 
   // Decay beat pulse
@@ -1245,10 +1262,8 @@ function updateBeat(now) {
 
 function getTimingFromBeat(now) {
   const interval = GAME.beatInterval;
-  const sinceLast = now - GAME.lastBeatTime;
-  const untilNext = interval - sinceLast;
-  const distFromBeat = Math.min(sinceLast, untilNext);
-  return distFromBeat;
+  const phase = ((now - GAME.lastBeatTime) % interval + interval) % interval;
+  return Math.min(phase, Math.abs(phase - interval / 2), interval - phase);
 }
 
 function getTimingRating(distFromBeat) {
@@ -1637,6 +1652,7 @@ function startGame() {
   GAME.beatInterval = 60000 / GAME.bpm;
   GAME.lastBeatTime = performance.now();
   GAME.beatCount = 0;
+  GAME.offbeatPlayed = false;
   GAME.score = 0;
   GAME.combo = 0;
   GAME.maxCombo = 0;
@@ -1676,6 +1692,10 @@ function startGame() {
   document.getElementById('hud').style.display = 'flex';
   document.getElementById('beat-indicator').style.display = 'flex';
   document.getElementById('beat-hint').classList.remove('visible');
+  document.querySelectorAll('.beat-pip').forEach((pip, index) => {
+    pip.classList.toggle('active', index === 0);
+    pip.classList.remove('offbeat');
+  });
   // Reset new-best label styles for next game over
   const nbEl = document.getElementById('new-best-label');
   nbEl.style.color = '';
@@ -1706,6 +1726,7 @@ function resumeGame() {
   GAME.state = 'playing';
   GAME.pauseReason = '';
   GAME.lastBeatTime = performance.now();
+  GAME.offbeatPlayed = false;
   lastTime = performance.now();
   canvas.tabIndex = 0;
   const pauseScreen = document.getElementById('pause-screen');

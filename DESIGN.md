@@ -20,7 +20,7 @@ Title screen as attract mode: logo type set in the mono display face, pulsing at
 ## Key screens list
 
 1. Title / difficulty select (with per-difficulty PBs)
-2. Gameplay (waves, BPM ramps at wave multiples of 3 with a visible "BPM UP: X" flash + pitch-shifted click, per SUGGESTIONS quick win 3)
+2. Gameplay (quarter-note beats and quieter eighth-note offbeats are valid timing anchors; waves ramp BPM at multiples of 3 with a visible "BPM UP: X" flash + pitch-shifted click)
 3. Wave transition overlay (brief dimmed full-screen "WAVE X" for ~1.5s, quick win 2)
 4. Game over / share card (score, wave, max combo, % perfect, difficulty + BPM, NEW BEST state, Copy Score + Share on X buttons)
 5. Mobile/no-keyboard gate screen (confident copy: keyboard required, link back on desktop)

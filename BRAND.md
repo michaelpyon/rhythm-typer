@@ -30,7 +30,7 @@ Rule: 2 accent colors carry the brand (cyan and magenta). Everything else is sup
 ## Spacing and motion personality
 
 - **Spacing:** generous dark space, HUD pinned to edges, center of screen belongs to gameplay. Title and game-over screens are 1 column, vertically rhythmic, no cards-in-cards.
-- **Motion personality: metronomic.** Everything meaningful pulses ON the beat: beat pips, background glow, button idle states, even the title screen breathes at the menu BPM. Motion off-beat is reserved for impacts (shark destroyed, screen flash on PERFECT).
+- **Motion personality: metronomic.** Quarter-note beats get the full cyan pulse; valid eighth-note offbeats get a smaller magenta pulse. Impacts stay distinct through particles and screen feedback.
 - Feedback must be under 100ms from keystroke; input feel beats visual polish in every tradeoff.
 - Screen flash on PERFECT stays subtle (current 0.08 alpha is right); juice escalates with combo tier, not with every keypress.
 

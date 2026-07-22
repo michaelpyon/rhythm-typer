@@ -30,7 +30,7 @@ Then visit `http://localhost:8000`.
 3. Sharks swim from the right carrying words above them.
 4. Type the first letter of any visible word to lock onto that shark.
 5. Keep typing the rest of the word to destroy the shark.
-6. Time keystrokes to the beat: PERFECT > GOOD > OK > MISS.
+6. Time keystrokes to the beat or eighth-note offbeat: PERFECT > GOOD > OK > MISS.
 7. Don't let sharks reach the diver. 0 health means game over.
 
 ## Scoring
