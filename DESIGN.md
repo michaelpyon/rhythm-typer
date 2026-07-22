@@ -46,7 +46,7 @@ Title screen as attract mode: logo type set in the mono display face, pulsing at
 
 The product makes no real-data claims: scores are computed from actual keystroke timing (real ms windows: 65/50/40 PERFECT by difficulty), no fabricated leaderboards, no fake player counts, no external APIs. This claim is TRUE at repo HEAD (verified in SUGGESTIONS.md ground-truth pass, node --check clean). 2 disclosure rules going forward: the OG image must not depict a specific score as if it were a real run unless labeled as example art, and no leaderboard UI may be added without a real backend (leaderboards are explicitly a bigger bet, out of scope for the static build).
 
-Deploy note: the Vercel bundle now contains exactly 3 public files. The stable URL still needs the 2 clean build gates, deployment, and independent public canary before this project can be marked live.
+Deploy note (2026-07-22): the Vercel bundle contains exactly 3 public files. Two consecutive production-build gates were clean and byte-identical, and the exact bundle passed an independent public canary at https://rhythm-typer.vercel.app. Internal markdown, Claude, gstack, and Vercel project files return 404.
 
 ## The screenshot-worthy moment to engineer
 

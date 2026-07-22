@@ -18,7 +18,7 @@ The person most likely to love and share Rhythm Typer is a 22-to-28-year-old who
 
 **Honest:** Scoring is algorithmic from actual timing (getTimingScore uses real 50ms PERFECT window on Normal). No inflated numbers, no invented data.
 
-**Release candidate status (2026-07-22):** The public bundle is allowlisted to `index.html`, `og.png`, and `favicon.svg`. Internal persona, brand, design, Claude, and gstack files are excluded. Production deployment and public verification are the remaining release steps.
+**Live release status (2026-07-22):** The public bundle is allowlisted to `index.html`, `og.png`, and `favicon.svg`. Internal persona, brand, design, Claude, gstack, and Vercel project files are excluded. Two consecutive production-build gates were clean and byte-identical. The stable URL passed desktop, mobile, and short-landscape public canaries with 0 console errors.
 
 **Nothing fabricated remains** in the current repo HEAD.
 
@@ -52,4 +52,4 @@ The person most likely to love and share Rhythm Typer is a 22-to-28-year-old who
 
 ## Deploy Status
 
-The release candidate is linked to the existing `rhythm-typer` Vercel project. Do not mark it live until 2 clean production-build gates pass and the stable URL is independently verified.
+The passed build is deployed through the existing `rhythm-typer` Vercel project at https://rhythm-typer.vercel.app. Future releases must keep the same 2-gate and independent-public-canary standard before replacing it.
