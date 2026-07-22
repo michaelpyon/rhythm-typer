@@ -12,7 +12,7 @@ The name **Rhythm Typer** and the core concept (words ride sharks toward a diver
 
 Deep-ocean arcade neon. The current base is right, push it further with discipline:
 
-- **Background:** near-black ocean navy, layered depth (#000 to #001830 range, subtle vertical gradient, faint parallax bubbles/light shafts)
+- **Background:** near-black ocean navy, layered depth (#020b18 to #001830 range, subtle vertical gradient, faint parallax bubbles/light shafts)
 - **Primary accent:** electric cyan (#0cf family) for score, UI chrome, PERFECT feedback
 - **Combo/energy accent:** hot magenta (#f0a family), reserved for combo state and multiplier moments only
 - **Danger:** warm red for health and near-miss states, used sparingly
@@ -40,7 +40,7 @@ Rule: 2 accent colors carry the brand (cyan and magenta). Everything else is sup
 2. Confident arcade brevity: "NEW BEST," "WAVE 7," "BPM UP: 165." All caps for game events, sentence case for UI copy.
 3. Never apologize, never tutorialize at length. 1 line of instruction max on the title screen.
 4. The keyboard gate is a badge, not a bug: "Keyboard required. This is the whole point."
-5. No exclamation-mark salesmanship, no emoji in UI copy (the shark favicon is the 1 exception).
+5. No exclamation-mark salesmanship and no emoji. The favicon is a drawn shark-fin mark.
 
 ## 3 reference products to measure taste against
 

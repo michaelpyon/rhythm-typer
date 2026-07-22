@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Rhythm Typer shark fin mark">
+  <rect width="64" height="64" rx="14" fill="#020b18"/>
+  <path d="M8 41h48" stroke="#00d7ff" stroke-width="4" stroke-linecap="round"/>
+  <path d="M23 40c4-13 11-21 19-24-1 9 1 17 8 24H23Z" fill="#ff29ad"/>
+  <circle cx="14" cy="21" r="3" fill="#00d7ff"/>
+  <circle cx="22" cy="17" r="2" fill="#00d7ff" opacity=".65"/>
+  <circle cx="28" cy="12" r="1.5" fill="#00d7ff" opacity=".4"/>
+</svg>

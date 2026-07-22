@@ -7,7 +7,7 @@
 <meta name="robots" content="index, follow">
 <meta name="description" content="Rhythm Typer is a typing rhythm game. Type words to destroy sharks swimming toward you. Hit each keystroke on the beat for combos and bonus points.">
 <meta name="keywords" content="typing game, rhythm game, browser game, typing practice, shark game">
-<meta name="author" content="Rhythm Typer">
+<meta name="author" content="Michael Pyon">
 
 <title>Rhythm Typer: Type to the Beat, Destroy the Sharks</title>
 
@@ -16,19 +16,23 @@
 <meta property="og:title" content="Rhythm Typer: Type to the Beat, Destroy the Sharks">
 <meta property="og:description" content="A typing rhythm game where you type words to destroy sharks before they reach you. Time keystrokes to the beat for bigger combos.">
 <meta property="og:url" content="https://rhythm-typer.vercel.app/">
-<meta property="og:image" content="https://rhythm-typer.vercel.app/og.svg">
+<meta property="og:image" content="https://rhythm-typer.vercel.app/og.png">
+<meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Rhythm Typer deep-sea game card with a shark word target, a four-beat timing lane, and the line Type fast. Hit the beat.">
 <meta property="og:site_name" content="Rhythm Typer">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Rhythm Typer: Type to the Beat, Destroy the Sharks">
 <meta name="twitter:description" content="A typing rhythm game where you type words to destroy sharks before they reach you. Time keystrokes to the beat for bigger combos.">
-<meta name="twitter:image" content="https://rhythm-typer.vercel.app/og.svg">
+<meta name="twitter:image" content="https://rhythm-typer.vercel.app/og.png">
+<meta name="twitter:image:alt" content="Rhythm Typer deep-sea game card with a shark word target, a four-beat timing lane, and the line Type fast. Hit the beat.">
+<meta name="twitter:creator" content="@mikaships">
 
 <link rel="canonical" href="https://rhythm-typer.vercel.app/">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦈</text></svg>">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
 <script type="application/ld+json">
 {
@@ -39,6 +43,13 @@
   "applicationCategory": "GameApplication",
   "genre": "Typing Game",
   "operatingSystem": "Web Browser",
+  "url": "https://rhythm-typer.vercel.app/",
+  "image": "https://rhythm-typer.vercel.app/og.png",
+  "creator": {
+    "@type": "Person",
+    "name": "Michael Pyon",
+    "url": "https://x.com/mikaships"
+  },
   "offers": {
     "@type": "Offer",
     "price": "0",
@@ -49,13 +60,15 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    background: #000;
+    background: #020b18;
     overflow: hidden;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #f4f8ff;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
     user-select: none;
   }
   button { touch-action: manipulation; }
   canvas { display: block; }
+  canvas:focus-visible { outline: 2px solid #00d7ff; outline-offset: -4px; }
   #ui-overlay {
     position: absolute;
     top: 0; left: 0;
@@ -72,19 +85,18 @@
     pointer-events: none;
   }
   .hud-box {
-    background: rgba(0,0,0,0.5);
+    background: rgba(2,11,24,0.88);
     border: 1px solid rgba(0,200,255,0.3);
     border-radius: 8px;
     padding: 8px 16px;
-    color: #fff;
+    color: #f4f8ff;
     font-size: 14px;
-    backdrop-filter: blur(4px);
   }
   #score-display { font-size: 22px; font-weight: bold; color: #0cf; }
   #combo-display { color: #f0a; font-weight: bold; }
   #health-bar-container {
     width: 200px; height: 12px;
-    background: rgba(0,0,0,0.6);
+    background: rgba(2,11,24,0.72);
     border: 1px solid rgba(255,60,60,0.4);
     border-radius: 6px;
     overflow: hidden;
@@ -156,7 +168,7 @@
     transform: translateX(-50%);
     font-size: 28px;
     font-weight: bold;
-    color: #fff;
+    color: #f4f8ff;
     letter-spacing: 4px;
     pointer-events: none;
     text-shadow: 0 0 8px rgba(0,200,255,0.6);
@@ -173,10 +185,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: rgba(0,10,30,0.85);
+    background: rgba(2,11,24,0.94);
     z-index: 20;
     pointer-events: auto;
-    backdrop-filter: blur(6px);
   }
   .screen-overlay.hidden { display: none; }
   .screen-overlay h1 {
@@ -188,7 +199,7 @@
   .screen-overlay h2 {
     font-size: 28px;
     color: #f0a;
-    margin-bottom: 30px;
+    margin-bottom: 18px;
   }
   .screen-overlay p {
     color: rgba(255,255,255,0.7);
@@ -201,13 +212,13 @@
   .screen-overlay .subtitle {
     color: rgba(255,255,255,0.5);
     font-size: 14px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
   .btn {
     padding: 14px 40px;
     min-height: 48px;
     font-size: 20px;
-    color: #fff;
+    color: #f4f8ff;
     background: linear-gradient(135deg, #0a6e8a, #0cf);
     border: none;
     border-radius: 8px;
@@ -225,13 +236,13 @@
     box-shadow: 0 0 20px rgba(0,200,255,0.4);
   }
   .btn:active {
-    transform: scale(0.98);
+    transform: scale(0.96);
   }
-  .mobile-warning {
+  .keyboard-gate {
     display: none;
-    color: #ff0;
-    background: rgba(255,255,0,0.1);
-    border: 1px solid rgba(255,255,0,0.4);
+    color: #ffe45f;
+    background: rgba(255,228,95,0.08);
+    border: 1px solid rgba(255,228,95,0.42);
     border-radius: 6px;
     padding: 12px 16px;
     margin: 16px 0;
@@ -240,13 +251,17 @@
     text-align: center;
   }
   @media (max-width: 768px), (pointer: coarse) {
-    .mobile-warning { display: block; }
+    .keyboard-gate { display: block; }
+    #title-screen:not(.keyboard-gated) .keyboard-gate { display: none; }
+    #title-screen.keyboard-gated .difficulty-select,
+    #title-screen.keyboard-gated #personal-best-banner,
+    #title-screen.keyboard-gated #start-btn { display: none; }
     .screen-overlay h1 { font-size: 44px; }
     .screen-overlay h2 { font-size: 20px; }
     .screen-overlay p { font-size: 14px; padding: 0 16px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .btn, .diff-btn, .beat-pip, #health-bar, #timing-feedback {
+    .btn, .diff-btn, .beat-pip, #health-bar, #timing-feedback, #wave-callout {
       transition: none;
     }
   }
@@ -259,7 +274,7 @@
     padding: 14px 24px;
     min-height: 44px;
     font-size: 14px;
-    color: #fff;
+    color: #f4f8ff;
     background: rgba(255,255,255,0.1);
     border: 2px solid rgba(255,255,255,0.2);
     border-radius: 6px;
@@ -280,12 +295,11 @@
     outline-offset: 3px;
   }
   .btn:focus-visible {
-    outline: 3px solid #fff;
+    outline: 3px solid #f4f8ff;
     outline-offset: 4px;
   }
   #final-score { font-size: 48px; color: #0cf; font-weight: bold; margin: 10px 0; }
   #final-stats { color: rgba(255,255,255,0.6); margin-bottom: 10px; }
-  .stat-line { margin: 4px 0; }
   .share-row {
     display: flex;
     gap: 12px;
@@ -297,7 +311,7 @@
     padding: 12px 24px;
     min-height: 44px;
     font-size: 14px;
-    color: #fff;
+    color: #f4f8ff;
     background: rgba(255,255,255,0.1);
     border: 2px solid rgba(0,200,255,0.4);
     border-radius: 8px;
@@ -339,13 +353,159 @@
     text-shadow: 0 0 12px #ffd700;
     display: none;
   }
+  .title-eyebrow {
+    margin-bottom: 10px;
+    color: rgba(244,248,255,0.52);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .timing-windows {
+    display: flex;
+    gap: 14px;
+    margin: 0 0 18px;
+    color: rgba(244,248,255,0.52);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+  }
+  .timing-windows strong { color: #00d7ff; }
+  .diff-btn {
+    min-width: 112px;
+  }
+  .diff-label, .diff-best { display: block; }
+  .diff-best {
+    margin-top: 8px;
+    color: rgba(244,248,255,0.45);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+  }
+  .diff-btn.selected .diff-best { color: rgba(0,215,255,0.76); }
+  #wave-callout {
+    position: absolute;
+    top: 18%;
+    left: 50%;
+    transform: translate(-50%, -8px);
+    padding: 10px 16px;
+    border: 1px solid rgba(0,215,255,0.36);
+    border-radius: 6px;
+    background: rgba(2,11,24,0.9);
+    color: #f4f8ff;
+    font-size: clamp(20px, 3vw, 34px);
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    opacity: 0;
+    pointer-events: none;
+    text-align: center;
+    text-transform: uppercase;
+    transition: opacity 180ms ease, transform 180ms ease;
+  }
+  #wave-callout.visible {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+  #wave-callout small {
+    display: block;
+    margin-top: 4px;
+    color: #ff29ad;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+  }
+  #audio-notice {
+    position: absolute;
+    top: 96px;
+    right: 16px;
+    display: none;
+    min-height: 44px;
+    padding: 8px 12px;
+    border: 1px solid rgba(255,228,95,0.5);
+    border-radius: 6px;
+    background: #101826;
+    color: #ffe45f;
+    cursor: pointer;
+    font: inherit;
+    pointer-events: auto;
+  }
+  #result-brand {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    margin-bottom: 4px;
+    color: rgba(244,248,255,0.48);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  #result-brand strong { color: #f4f8ff; }
+  #result-mode {
+    color: #ff29ad;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  #final-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(90px, 1fr));
+    gap: 8px;
+    width: min(620px, calc(100vw - 32px));
+    margin: 4px 0 6px;
+  }
+  .result-stat {
+    padding: 10px;
+    border: 1px solid rgba(0,215,255,0.18);
+    border-radius: 6px;
+    background: rgba(2,11,24,0.64);
+    color: rgba(244,248,255,0.52);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-align: left;
+    text-transform: uppercase;
+  }
+  .result-stat strong {
+    display: block;
+    margin-top: 4px;
+    color: #f4f8ff;
+    font-size: 18px;
+  }
+  #timing-mix {
+    color: rgba(244,248,255,0.58);
+    font-size: 11px;
+    letter-spacing: 0.03em;
+  }
+  #pause-screen h1 { margin-bottom: 12px; }
+  #pause-screen p { margin-bottom: 2px; }
+  @media (max-width: 640px) {
+    .timing-windows { gap: 8px; font-size: 10px; }
+    .difficulty-select { gap: 8px; }
+    .diff-btn { min-width: 0; padding: 12px 10px; }
+    #final-stats { grid-template-columns: repeat(2, minmax(110px, 1fr)); }
+    #result-brand { flex-direction: column; gap: 3px; align-items: center; }
+  }
+  @media (max-height: 500px) and (min-width: 769px) {
+    .screen-overlay { padding: 8px 20px; }
+    .title-eyebrow { display: none; }
+    .screen-overlay h1 { margin: 0 0 2px; font-size: 42px; }
+    .screen-overlay h2 { margin-bottom: 7px; font-size: 21px; }
+    .screen-overlay p { margin-bottom: 4px; font-size: 12px; line-height: 1.3; }
+    .timing-windows { margin-bottom: 7px; }
+    .difficulty-select { margin-top: 4px; }
+    .diff-btn { min-height: 44px; padding: 7px 20px; }
+    .diff-best { margin-top: 3px; }
+    #personal-best-banner { margin-top: 5px; }
+    .btn { min-height: 44px; margin-top: 7px; padding: 8px 34px; }
+    #gameover-screen #final-score { margin: 2px 0; font-size: 40px; }
+    #gameover-screen #new-best-label { margin: 0; }
+    #gameover-screen #final-stats { margin: 2px 0; }
+    #gameover-screen .share-row { margin-top: 6px; }
+  }
 </style>
 </head>
 <body>
 <main role="main" aria-label="Rhythm Typer game">
-<canvas id="game-canvas" role="img" aria-label="Rhythm Typer gameplay area showing sharks and underwater scene"></canvas>
+<canvas id="game-canvas" role="img" tabindex="-1" aria-label="Rhythm Typer gameplay area. Type the word above each shark and time each keystroke to the four-beat indicator."></canvas>
 
-<div id="ui-overlay" aria-live="polite">
+<div id="ui-overlay">
   <div id="hud" style="display:none;" role="status" aria-label="Game HUD">
     <div class="hud-box">
       <div id="score-display" aria-label="Score">0</div>
@@ -364,6 +524,10 @@
 
   <div id="timing-feedback" aria-live="polite"></div>
 
+  <div id="wave-callout" role="status" aria-live="assertive"></div>
+
+  <button id="audio-notice" type="button">Sound blocked. Click to enable beat audio.</button>
+
   <div id="beat-indicator" style="display:none;" aria-hidden="true">
     <div id="beat-pips">
       <div class="beat-pip" data-beat="0"></div>
@@ -377,18 +541,22 @@
 
 <!-- Title Screen -->
 <section id="title-screen" class="screen-overlay" aria-labelledby="title-heading">
+  <div class="title-eyebrow">Deep-sea rhythm trial</div>
   <h1 id="title-heading">RHYTHM TYPER</h1>
-  <h2>Type to the Beat</h2>
-  <p>Words swim toward you on sharks. Type them to destroy the sharks before they reach you.</p>
-  <p>Watch the beat. Time your keystrokes to the rhythm for bonus points and bigger combos.</p>
-  <p class="subtitle">PERFECT &gt; GOOD &gt; OK &gt; MISS</p>
-  <div class="mobile-warning" role="alert">
-    A physical keyboard is required. Please play on a desktop or laptop.
+  <h2>Type fast. Hit the beat.</h2>
+  <p>Destroy each shark before it reaches your diver. On-beat keystrokes build the score.</p>
+  <div class="timing-windows" id="timing-windows" aria-label="Easy timing windows">
+    <span><strong>Perfect</strong> <span id="perfect-window">65</span> ms</span>
+    <span>Good <span id="good-window">130</span> ms</span>
+    <span>OK <span id="ok-window">200</span> ms</span>
+  </div>
+  <div class="keyboard-gate" id="keyboard-gate" role="status">
+    Keyboard required. Connect one, then press any key to unlock play.
   </div>
   <div class="difficulty-select" role="group" aria-label="Difficulty selection">
-    <button class="diff-btn selected" data-diff="easy" aria-pressed="true">Easy<br><small>90 BPM</small></button>
-    <button class="diff-btn" data-diff="normal" aria-pressed="false">Normal<br><small>120 BPM</small></button>
-    <button class="diff-btn" data-diff="hard" aria-pressed="false">Hard<br><small>150 BPM</small></button>
+    <button class="diff-btn selected" type="button" data-diff="easy" aria-pressed="true"><span class="diff-label">Easy</span><small>90 BPM</small><span class="diff-best" id="easy-best">No PB</span></button>
+    <button class="diff-btn" type="button" data-diff="normal" aria-pressed="false"><span class="diff-label">Normal</span><small>120 BPM</small><span class="diff-best" id="normal-best">No PB</span></button>
+    <button class="diff-btn" type="button" data-diff="hard" aria-pressed="false"><span class="diff-label">Hard</span><small>150 BPM</small><span class="diff-best" id="hard-best">No PB</span></button>
   </div>
   <div id="personal-best-banner" aria-live="polite"></div>
   <button class="btn" id="start-btn" type="button">START</button>
@@ -396,15 +564,25 @@
 
 <!-- Game Over Screen -->
 <section id="gameover-screen" class="screen-overlay hidden" aria-labelledby="gameover-heading" aria-hidden="true">
+  <div id="result-brand"><strong>Rhythm Typer</strong><span>rhythm-typer.vercel.app</span></div>
   <h1 id="gameover-heading">GAME OVER</h1>
   <div id="new-best-label" aria-live="polite"></div>
+  <div id="result-mode"></div>
   <div id="final-score" aria-label="Final score">0</div>
   <div id="final-stats"></div>
+  <div id="timing-mix"></div>
   <div class="share-row">
     <button class="share-btn" id="share-copy-btn" type="button">Copy Score</button>
-    <button class="share-btn" id="share-tweet-btn" type="button">Tweet</button>
+    <button class="share-btn" id="share-tweet-btn" type="button">Share on X</button>
   </div>
   <button class="btn" id="restart-btn" type="button">PLAY AGAIN</button>
+</section>
+
+<section id="pause-screen" class="screen-overlay hidden" aria-labelledby="pause-heading" aria-hidden="true">
+  <div class="title-eyebrow">Run held</div>
+  <h1 id="pause-heading">PAUSED</h1>
+  <p>The clock stopped. Your combo is safe.</p>
+  <button class="btn" id="resume-btn" type="button">RESUME</button>
 </section>
 </main>
 
@@ -469,7 +647,7 @@ const WORDS_MEDIUM = [
   'fiber','glyph','hyper','index','jolts','kayak','lucid','metro','nervy','oxide'
 ];
 const WORDS_HARD = [
-  'absolute','alchemy','backbone','bacteria','calendar','capacity','database','December',
+  'absolute','alchemy','backbone','bacteria','calendar','capacity','database','december',
   'dynamite','elephant','envelope','exchange','external','familiar','function','generate',
   'geometry','guardian','handbook','harmonic','identity','illusion','immortal','industry',
   'infinity','keyboard','kilowatt','language','lavender','magazine','magnetic','manifest',
@@ -486,9 +664,13 @@ const WORDS_HARD = [
 // ---- Audio System ----
 let audioCtx = null;
 
-function initAudio() {
+async function initAudio() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  if (audioCtx.state === 'suspended') audioCtx.resume();
+  try {
+    if (audioCtx.state === 'suspended') await audioCtx.resume();
+  } catch (_) {}
+  const notice = document.getElementById('audio-notice');
+  notice.style.display = audioCtx.state === 'running' ? 'none' : 'block';
 }
 
 function playClick(freq = 880, duration = 0.04, vol = 0.12) {
@@ -553,10 +735,10 @@ function playDamage() {
 
 // ---- Game State ----
 const GAME = {
-  state: 'menu', // menu, playing, gameover
-  difficulty: 'normal',
-  bpm: 120,
-  beatInterval: 500, // ms
+  state: 'menu', // menu, playing, paused, gameover
+  difficulty: 'easy',
+  bpm: 90,
+  beatInterval: 60000 / 90, // ms
   lastBeatTime: 0,
   beatCount: 0,
   currentBeatPip: 0,
@@ -592,6 +774,7 @@ const GAME = {
   flashAlpha: 0,
 
   hintDismissed: false,
+  pauseReason: '',
 
   // Timing windows (ms from nearest beat)
   PERFECT_WINDOW: 50,
@@ -681,7 +864,7 @@ class Enemy {
     // Eye
     ctx.beginPath();
     ctx.arc(cx - bodyLen * 0.3, cy - bodyH * 0.15, 3, 0, Math.PI * 2);
-    ctx.fillStyle = '#fff';
+    ctx.fillStyle = '#f4f8ff';
     ctx.fill();
     ctx.beginPath();
     ctx.arc(cx - bodyLen * 0.3, cy - bodyH * 0.15, 1.5, 0, Math.PI * 2);
@@ -692,7 +875,7 @@ class Enemy {
     ctx.beginPath();
     ctx.moveTo(cx - bodyLen * 0.5, cy + bodyH * 0.1);
     ctx.quadraticCurveTo(cx - bodyLen * 0.35, cy + bodyH * 0.25, cx - bodyLen * 0.2, cy + bodyH * 0.1);
-    ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+    ctx.strokeStyle = 'rgba(2,11,24,0.42)';
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
@@ -712,7 +895,7 @@ class Enemy {
 
     // Word background
     const wordWidth = ctx.measureText(this.word).width + 16;
-    ctx.fillStyle = this.targeted ? 'rgba(0,200,255,0.2)' : 'rgba(0,0,0,0.5)';
+    ctx.fillStyle = this.targeted ? 'rgba(0,200,255,0.2)' : 'rgba(2,11,24,0.72)';
     ctx.strokeStyle = this.targeted ? 'rgba(0,200,255,0.6)' : 'rgba(255,255,255,0.15)';
     ctx.lineWidth = 1;
     roundRect(ctx, cx - wordWidth / 2, wordY - 13, wordWidth, 26, 5);
@@ -732,7 +915,7 @@ class Enemy {
         ctx.fillStyle = '#ff0';
         ctx.globalAlpha = 1;
       } else {
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = '#f4f8ff';
         ctx.globalAlpha = 0.85;
       }
       ctx.fillText(chars[i], charX + cw / 2, wordY);
@@ -831,7 +1014,7 @@ class FloatingText {
   draw(ctx) {
     if (this.life <= 0) return;
     ctx.globalAlpha = Math.max(0, this.life);
-    ctx.font = 'bold 20px sans-serif';
+    ctx.font = 'bold 20px ui-monospace, monospace';
     ctx.fillStyle = this.color;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -1252,6 +1435,14 @@ function updateHUD() {
   }
 }
 
+function showWaveCallout(wave, bpmIncreased) {
+  const el = document.getElementById('wave-callout');
+  el.innerHTML = `WAVE ${wave}${bpmIncreased ? `<small>BPM UP · ${GAME.bpm}</small>` : '<small>Lane clear</small>'}`;
+  el.classList.add('visible');
+  clearTimeout(el._timeout);
+  el._timeout = setTimeout(() => el.classList.remove('visible'), 1500);
+}
+
 function spawnHitParticles(x, y, color) {
   for (let i = 0; i < 8; i++) {
     const angle = Math.random() * Math.PI * 2;
@@ -1269,7 +1460,7 @@ function spawnDestroyParticles(x, y) {
   for (let i = 0; i < 25; i++) {
     const angle = Math.random() * Math.PI * 2;
     const speed = 2 + Math.random() * 5;
-    const colors = ['#0ff', '#0f0', '#ff0', '#f0f', '#fff'];
+    const colors = ['#0ff', '#0f0', '#ff0', '#f0f', '#f4f8ff'];
     GAME.particles.push(new Particle(
       x, y, colors[Math.floor(Math.random() * colors.length)],
       Math.cos(angle) * speed, Math.sin(angle) * speed - 2,
@@ -1320,11 +1511,13 @@ function updateGame(dt) {
     GAME.enemiesPerWave = Math.min(15, GAME.enemiesPerWave + 1);
     GAME.spawnInterval = Math.max(800, GAME.spawnInterval - 80);
     // Slight BPM increase every few waves
-    if (GAME.wave % 3 === 0) {
+    const bpmIncreased = GAME.wave % 3 === 0;
+    if (bpmIncreased) {
       GAME.bpm = Math.min(200, GAME.bpm + 5);
       GAME.beatInterval = 60000 / GAME.bpm;
     }
-    floatingTexts.push(new FloatingText(canvas.width / 2, canvas.height / 2, `WAVE ${GAME.wave}`, '#0cf'));
+    showWaveCallout(GAME.wave, bpmIncreased);
+    updateHUD();
   }
 
   // Update enemies
@@ -1466,16 +1659,20 @@ function startGame() {
   GAME.beatPulse = 0;
   GAME.flashAlpha = 0;
   GAME.hintDismissed = false;
+  GAME.pauseReason = '';
   GAME.PERFECT_WINDOW = settings.PERFECT_WINDOW;
   GAME.GOOD_WINDOW = settings.GOOD_WINDOW;
   GAME.OK_WINDOW = settings.OK_WINDOW;
 
   const titleScreen = document.getElementById('title-screen');
   const gameoverScreen = document.getElementById('gameover-screen');
+  const pauseScreen = document.getElementById('pause-screen');
   titleScreen.classList.add('hidden');
   titleScreen.setAttribute('aria-hidden', 'true');
   gameoverScreen.classList.add('hidden');
   gameoverScreen.setAttribute('aria-hidden', 'true');
+  pauseScreen.classList.add('hidden');
+  pauseScreen.setAttribute('aria-hidden', 'true');
   document.getElementById('hud').style.display = 'flex';
   document.getElementById('beat-indicator').style.display = 'flex';
   document.getElementById('beat-hint').classList.remove('visible');
@@ -1488,10 +1685,38 @@ function startGame() {
   // Update health bar aria
   document.getElementById('health-bar-container').setAttribute('aria-valuenow', GAME.health);
   updateHUD();
+  canvas.tabIndex = 0;
+  requestAnimationFrame(() => canvas.focus({ preventScroll: true }));
+}
+
+function pauseGame(reason = 'Paused') {
+  if (GAME.state !== 'playing') return;
+  GAME.state = 'paused';
+  GAME.pauseReason = reason;
+  canvas.tabIndex = -1;
+  const pauseScreen = document.getElementById('pause-screen');
+  pauseScreen.classList.remove('hidden');
+  pauseScreen.setAttribute('aria-hidden', 'false');
+  setTimeout(() => document.getElementById('resume-btn').focus(), 50);
+}
+
+function resumeGame() {
+  if (GAME.state !== 'paused') return;
+  initAudio();
+  GAME.state = 'playing';
+  GAME.pauseReason = '';
+  GAME.lastBeatTime = performance.now();
+  lastTime = performance.now();
+  canvas.tabIndex = 0;
+  const pauseScreen = document.getElementById('pause-screen');
+  pauseScreen.classList.add('hidden');
+  pauseScreen.setAttribute('aria-hidden', 'true');
+  canvas.focus({ preventScroll: true });
 }
 
 function gameOver() {
   GAME.state = 'gameover';
+  canvas.tabIndex = -1;
   document.getElementById('hud').style.display = 'none';
   document.getElementById('beat-indicator').style.display = 'none';
   document.getElementById('current-word-display').innerHTML = '';
@@ -1503,7 +1728,7 @@ function gameOver() {
     newBestEl.textContent = 'NEW BEST!';
     newBestEl.style.display = 'block';
   } else {
-    const pb = pbGet();
+    const pb = pbGet(GAME.difficulty);
     newBestEl.textContent = pb ? `Best: ${pb.score.toLocaleString()} (Wave ${pb.wave})` : '';
     newBestEl.style.display = pb ? 'block' : 'none';
     newBestEl.style.color = 'rgba(255,255,255,0.4)';
@@ -1514,19 +1739,15 @@ function gameOver() {
   document.getElementById('final-score').textContent = GAME.score.toLocaleString();
   const total = GAME.totalCharsTyped || 1;
   const pct = (n) => Math.round(n / total * 100);
+  const diffLabel = GAME.difficulty.charAt(0).toUpperCase() + GAME.difficulty.slice(1);
+  document.getElementById('result-mode').textContent = `${diffLabel} | ${GAME.bpm} BPM`;
   document.getElementById('final-stats').innerHTML = `
-    <div class="stat-line">Wave Reached: <strong>${GAME.wave}</strong></div>
-    <div class="stat-line">Max Combo: <strong>${GAME.maxCombo}x</strong></div>
-    <div class="stat-line">Characters Typed: <strong>${GAME.totalCharsTyped}</strong></div>
-    <div class="stat-line" style="margin-top:8px;">
-      <span style="color:#0ff">PERFECT: ${GAME.perfectCount} (${pct(GAME.perfectCount)}%)</span> &nbsp;
-      <span style="color:#0f0">GOOD: ${GAME.goodCount} (${pct(GAME.goodCount)}%)</span>
-    </div>
-    <div class="stat-line">
-      <span style="color:#ff0">OK: ${GAME.okCount} (${pct(GAME.okCount)}%)</span> &nbsp;
-      <span style="color:#f44">MISS: ${GAME.missCount} (${pct(GAME.missCount)}%)</span>
-    </div>
+    <div class="result-stat">Wave<strong>${GAME.wave}</strong></div>
+    <div class="result-stat">Max combo<strong>${GAME.maxCombo}x</strong></div>
+    <div class="result-stat">Characters<strong>${GAME.totalCharsTyped}</strong></div>
+    <div class="result-stat">Perfect<strong>${pct(GAME.perfectCount)}%</strong></div>
   `;
+  document.getElementById('timing-mix').textContent = `Perfect ${GAME.perfectCount} | Good ${GAME.goodCount} | OK ${GAME.okCount} | Miss ${GAME.missCount}`;
 
   const gameoverScreen = document.getElementById('gameover-screen');
   gameoverScreen.classList.remove('hidden');
@@ -1538,6 +1759,8 @@ function gameOver() {
 // ---- UI Event Listeners ----
 document.getElementById('start-btn').addEventListener('click', () => startGame());
 document.getElementById('restart-btn').addEventListener('click', () => startGame());
+document.getElementById('resume-btn').addEventListener('click', () => resumeGame());
+document.getElementById('audio-notice').addEventListener('click', () => initAudio());
 
 // ---- Share Score ----
 const SHARE_URL = 'rhythm-typer.vercel.app';
@@ -1545,7 +1768,7 @@ function getShareText() {
   const diff = GAME.difficulty.charAt(0).toUpperCase() + GAME.difficulty.slice(1);
   const total = GAME.totalCharsTyped || 1;
   const perfectPct = Math.round(GAME.perfectCount / total * 100);
-  return `Rhythm Typer [${diff}] - Score: ${GAME.score.toLocaleString()} | Wave ${GAME.wave} | Max combo ${GAME.maxCombo}x | ${perfectPct}% perfect\nCan you beat it? https://${SHARE_URL}`;
+  return `Rhythm Typer | ${diff} ${GAME.bpm} BPM | ${GAME.score.toLocaleString()} pts | Wave ${GAME.wave} | ${GAME.maxCombo}x combo | ${perfectPct}% PERFECT\nBeat it: https://${SHARE_URL}`;
 }
 
 document.getElementById('share-copy-btn').addEventListener('click', (e) => {
@@ -1556,21 +1779,20 @@ document.getElementById('share-copy-btn').addEventListener('click', (e) => {
     btn.textContent = 'Copied';
     setTimeout(() => { btn.textContent = original; }, 1800);
   };
+  const fallback = () => {
+    const result = window.prompt('Copy your score:', text);
+    if (result !== null) done();
+  };
   if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(done).catch(() => {
-      window.prompt('Copy your score:', text);
-    });
+    navigator.clipboard.writeText(text).then(done).catch(fallback);
   } else {
-    window.prompt('Copy your score:', text);
+    fallback();
   }
 });
 
 document.getElementById('share-tweet-btn').addEventListener('click', () => {
-  const diff = GAME.difficulty.charAt(0).toUpperCase() + GAME.difficulty.slice(1);
-  const total = GAME.totalCharsTyped || 1;
-  const perfectPct = Math.round(GAME.perfectCount / total * 100);
-  const text = `Rhythm Typer [${diff}] - Score: ${GAME.score.toLocaleString()} | Wave ${GAME.wave} | Max combo ${GAME.maxCombo}x | ${perfectPct}% perfect - Can you beat it?`;
-  const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent('https://' + SHARE_URL)}`;
+  const text = getShareText();
+  const url = `https://x.com/intent/post?text=${encodeURIComponent(text)}`;
   window.open(url, '_blank', 'noopener');
 });
 
@@ -1583,54 +1805,136 @@ document.querySelectorAll('.diff-btn').forEach(btn => {
     btn.classList.add('selected');
     btn.setAttribute('aria-pressed', 'true');
     GAME.difficulty = btn.dataset.diff;
+    renderTimingWindows();
+    renderPersonalBestBanner();
   });
 });
+
+function renderTimingWindows() {
+  const settings = DIFFICULTY_SETTINGS[GAME.difficulty];
+  const diffLabel = GAME.difficulty.charAt(0).toUpperCase() + GAME.difficulty.slice(1);
+  document.getElementById('perfect-window').textContent = settings.PERFECT_WINDOW;
+  document.getElementById('good-window').textContent = settings.GOOD_WINDOW;
+  document.getElementById('ok-window').textContent = settings.OK_WINDOW;
+  document.getElementById('timing-windows').setAttribute('aria-label', `${diffLabel} timing windows`);
+}
 
 // Prevent space from scrolling; Enter/Space to restart on game over
 window.addEventListener('keydown', (e) => {
   if (e.code === 'Space' && GAME.state === 'playing') e.preventDefault();
+  if (e.code === 'Escape' && GAME.state === 'playing') {
+    e.preventDefault();
+    pauseGame('Escape');
+  }
+  if ((e.code === 'Enter' || e.code === 'Space') && GAME.state === 'paused') {
+    e.preventDefault();
+    resumeGame();
+  }
   if ((e.code === 'Enter' || e.code === 'Space') && GAME.state === 'gameover') {
     e.preventDefault();
     startGame();
   }
 });
 
-// ---- Personal Best ----
-const PB_KEY = 'rhythmTyper_personalBest';
-let _pbMemory = null; // in-memory fallback for private/quota contexts
+window.addEventListener('blur', () => pauseGame('Window focus lost'));
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) pauseGame('Tab hidden');
+});
 
-function pbGet() {
+// ---- Personal Best ----
+const PB_KEY = 'rhythmTyper_personalBests_v2';
+const LEGACY_PB_KEY = 'rhythmTyper_personalBest';
+let _pbMemory = {};
+let bestsPersist = true;
+
+function readPersonalBests() {
   try {
     const raw = localStorage.getItem(PB_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch (_) {}
+    if (raw) {
+      _pbMemory = JSON.parse(raw);
+      return _pbMemory;
+    }
+    const legacyRaw = localStorage.getItem(LEGACY_PB_KEY);
+    if (legacyRaw) {
+      const legacy = JSON.parse(legacyRaw);
+      if (legacy && legacy.diff) {
+        _pbMemory = { [legacy.diff]: legacy };
+        localStorage.setItem(PB_KEY, JSON.stringify(_pbMemory));
+        return _pbMemory;
+      }
+    }
+  } catch (_) {
+    bestsPersist = false;
+  }
   return _pbMemory;
 }
 
-function pbSet(data) {
-  _pbMemory = data;
-  try { localStorage.setItem(PB_KEY, JSON.stringify(data)); } catch (_) {}
+function pbGet(difficulty = GAME.difficulty) {
+  return readPersonalBests()[difficulty] || null;
+}
+
+function pbSet(difficulty, data) {
+  const bests = readPersonalBests();
+  bests[difficulty] = data;
+  _pbMemory = bests;
+  try {
+    localStorage.setItem(PB_KEY, JSON.stringify(bests));
+  } catch (_) {
+    bestsPersist = false;
+  }
 }
 
 function updatePersonalBest() {
-  const prev = pbGet();
+  const prev = pbGet(GAME.difficulty);
   const isNew = !prev || GAME.score > prev.score;
   if (isNew) {
-    pbSet({ score: GAME.score, wave: GAME.wave, diff: GAME.difficulty });
+    pbSet(GAME.difficulty, { score: GAME.score, wave: GAME.wave, diff: GAME.difficulty });
   }
+  renderDifficultyBests();
   return isNew;
 }
 
+function renderDifficultyBests() {
+  for (const diff of Object.keys(DIFFICULTY_SETTINGS)) {
+    const pb = pbGet(diff);
+    const el = document.getElementById(`${diff}-best`);
+    el.textContent = pb ? `PB ${pb.score.toLocaleString()} · W${pb.wave}` : 'No PB';
+  }
+}
+
 function renderPersonalBestBanner() {
-  const pb = pbGet();
+  const pb = pbGet(GAME.difficulty);
   const banner = document.getElementById('personal-best-banner');
   if (!pb) { banner.style.display = 'none'; return; }
-  const diffLabel = pb.diff.charAt(0).toUpperCase() + pb.diff.slice(1);
-  banner.textContent = `Your best: ${pb.score.toLocaleString()} on ${diffLabel} (Wave ${pb.wave})`;
+  const prefix = bestsPersist ? 'Selected PB' : 'Best this session';
+  banner.textContent = `${prefix}: ${pb.score.toLocaleString()} · Wave ${pb.wave}`;
   banner.style.display = 'block';
 }
 
+const coarsePointer = window.matchMedia('(max-width: 768px), (pointer: coarse)');
+let keyboardGateCleared = false;
+
+function renderKeyboardGate() {
+  const gated = coarsePointer.matches && !keyboardGateCleared;
+  document.getElementById('title-screen').classList.toggle('keyboard-gated', gated);
+}
+
+document.addEventListener('keydown', () => {
+  if (GAME.state === 'menu' && coarsePointer.matches && !keyboardGateCleared) {
+    keyboardGateCleared = true;
+    renderKeyboardGate();
+    document.getElementById('start-btn').focus({ preventScroll: true });
+  }
+});
+
+if (typeof coarsePointer.addEventListener === 'function') {
+  coarsePointer.addEventListener('change', renderKeyboardGate);
+}
+
 // ---- Start ----
+renderKeyboardGate();
+renderDifficultyBests();
+renderTimingWindows();
 renderPersonalBestBanner();
 requestAnimationFrame(gameLoop);
 </script>

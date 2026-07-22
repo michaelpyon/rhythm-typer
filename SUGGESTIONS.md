@@ -12,13 +12,13 @@ The person most likely to love and share Rhythm Typer is a 22-to-28-year-old who
 - Difficulty selection (Easy 90 BPM / Normal 120 BPM / Hard 150 BPM) sets timing windows correctly (PERFECT: 65/50/40 ms).
 - Beat pips (4 dots) light up on rhythm; metronome clicks play via Web Audio API.
 - Beat-hint "Type on the flash for more points" fades in at beat 1 and out after beat 8, then hides.
-- Share text (Copy Score and Tweet) includes difficulty, wave, max combo, and perfect pct, e.g. "Rhythm Typer [Normal] - Score: 4,820 | Wave 3 | Max combo 12x | 41% perfect".
+- Share text (Copy Score and Share on X) includes difficulty, live BPM, wave, max combo, and perfect percentage.
 - No fabricated data, no false real-time claims, no example.com links, no stale dates.
 - JS syntax passes node --check on extracted script (line 391 to 1545).
 
 **Honest:** Scoring is algorithmic from actual timing (getTimingScore uses real 50ms PERFECT window on Normal). No inflated numbers, no invented data.
 
-**Live vs Repo gap:** Live at rhythm-typer.vercel.app is on the PRE-beat-hint build (commit prior to a670fda). The beat-hint (#beat-hint) and enriched share text from the last 2 commits are in repo HEAD but NOT yet deployed. This is a deploy-needed item only, not a code fix.
+**Release candidate status (2026-07-22):** The public bundle is allowlisted to `index.html`, `og.png`, and `favicon.svg`. Internal persona, brand, design, Claude, and gstack files are excluded. Production deployment and public verification are the remaining release steps.
 
 **Nothing fabricated remains** in the current repo HEAD.
 
@@ -34,22 +34,15 @@ The person most likely to love and share Rhythm Typer is a 22-to-28-year-old who
 - Keyboard shortcut Enter/Space to restart on game over (no mouse required after a run ends).
 - Auto-target when exactly 1 enemy is alive and nothing is targeted (reduces frustration when the last shark is close).
 
-### Quick Wins Remaining
+### Shipped Wave 3
 
-1. **Difficulty-specific best scores** (M effort)
-   - What: Store a separate best for each difficulty key in localStorage. Title shows the best per selected difficulty.
-   - Why: A Hard-mode best vs Easy-mode best are incomparable. Encourages trying harder modes.
-   - Effort: M.
-
-2. **Wave announcement visual polish** (S)
-   - What: The "WAVE X" floating text appears mid-screen but is easy to miss. A brief full-screen dimmed overlay with wave number for 1.5 seconds would feel intentional.
-   - Effort: S.
-
-3. **BPM ramp-up signal** (S/M)
-   - What: When BPM increases at wave multiples of 3, show a brief "BPM UP: 125" flash with a higher-pitched click burst so the player knows the tempo shifted.
-   - Effort: S.
-
-4. **Favicon clarity** (S, already has shark emoji favicon, done)
+- Difficulty-specific local bests with legacy-score migration and an in-memory fallback.
+- 1.5-second wave callout plus an explicit BPM-up signal every 3rd wave.
+- Self-attributed game-over poster with difficulty, live BPM, wave, max combo, characters, and perfect percentage.
+- Keyboard-detection gate for narrow/coarse-pointer screens, with external-keyboard unlock.
+- Deliberate pause on Escape or focus loss, with beat-clock resync on resume.
+- Raster 1200x630 social card, drawn favicon, complete image alt/type metadata, and `@mikaships` creator metadata.
+- Corrected the Easy-selected/Normal-engine mismatch and the impossible capitalized `December` Hard word.
 
 ### Bigger Bets (L effort, skip this pass)
 
@@ -59,4 +52,4 @@ The person most likely to love and share Rhythm Typer is a 22-to-28-year-old who
 
 ## Deploy Status
 
-Commits a670fda (beat-hint) and 17c4a1a (enriched share) are in repo HEAD but the live URL still serves the pre-fix build. Next Vercel deploy will flush both without any further code change.
+The release candidate is linked to the existing `rhythm-typer` Vercel project. Do not mark it live until 2 clean production-build gates pass and the stable URL is independently verified.

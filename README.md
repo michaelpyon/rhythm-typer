@@ -55,15 +55,18 @@ Then visit `http://localhost:8000`.
 - Pure HTML, CSS, JS. Zero build, zero dependencies.
 - Canvas 2D for rendering.
 - Web Audio API for the metronome and SFX (synthesized, no audio files).
-- ~1300 lines, all in `index.html`.
+- Single-file game logic and interface in `index.html`.
 
 ## File structure
 
 ```
 rhythm-typer/
-  index.html   # Everything (HTML + CSS + JS)
-  og.svg       # Social share preview
-  README.md    # This file
+  index.html      # Everything interactive (HTML + CSS + JS)
+  favicon.svg     # Drawn shark-fin mark
+  og.png          # 1200x630 social share preview
+  og.svg          # Legacy design source, not deployed
+  .vercelignore   # Public allowlist for the 3 release files
+  README.md       # This file
 ```
 
 ## Browser support
